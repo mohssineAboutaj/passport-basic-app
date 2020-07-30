@@ -1,5 +1,5 @@
 <nav class="navbar navbar-expand-sm navbar-dark bg-primary">
-	<a class="navbar-brand" href="#">Navbar</a>
+	<a class="navbar-brand mx-auto mx-md-left" href="#">Navbar</a>
 	<button
 		class="navbar-toggler d-lg-none"
 		type="button"
@@ -13,31 +13,19 @@
 	</button>
 	<div class="collapse navbar-collapse" id="collapsibleNavId">
 		<ul class="navbar-nav ml-auto mt-lg-0">
-			<li class="nav-item active">
-				<a class="nav-link" href="/">
-					<i class="fas fa-home fa-2x mx-auto d-block"></i>
-					Home
+			<% [ { label: "home", href: "/home", icon: "home" },{ label: "dashboard",
+			href: "/dashboard", icon: "chart-area" }, { label: "login", href:
+			"/login", icon: "sign-in-alt" }, { label: "register", href: "/register",
+			icon: "user-plus" } ].forEach((el, index) => { %>
+			<li class="nav-item <%= (index == 0) ? 'active' : '' %>">
+				<a class="nav-link text-capitalize" href="<%= el.href %>">
+					<i class="fas fa-<%= el.icon %> fa-1x mx-2 mx-md-auto d-md-block"></i>
+					<%= el.label %> <% if (index == 0) { %>
 					<span class="sr-only">(current)</span>
+					<% } %>
 				</a>
 			</li>
-			<li class="nav-item">
-				<a class="nav-link" href="/dashboard">
-					<i class="fas fa-chart-area fa-2x mx-auto d-block"></i>
-					dashboard
-				</a>
-			</li>
-			<li class="nav-item">
-				<a class="nav-link" href="/login">
-					<i class="fas fa-sign-in-alt fa-2x mx-auto d-block"></i>
-					login
-				</a>
-			</li>
-			<li class="nav-item">
-				<a class="nav-link" href="/register">
-					<i class="fas fa-user-plus fa-2x mx-auto d-block"></i>
-					register
-				</a>
-			</li>
+			<% }) %>
 		</ul>
 	</div>
 </nav>

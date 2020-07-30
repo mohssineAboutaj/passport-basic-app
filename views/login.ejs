@@ -1,1 +1,43 @@
-<h2>login</h2>
+<div class="card mx-auto my-5 card-custom-max-width">
+	<div class="card-title h2 text-center text-capitalize">
+		<i class="fas fa-lock mx-2"></i>
+		<span>login</span>
+	</div>
+	<div class="card-body text-capitalize">
+		<form action="/login" method="POST">
+			<% fields.forEach((f) => { %>
+			<div class="form-group my-3">
+				<label for="<%= f.id %>"><%= f.label %> </label>
+				<div class="input-group">
+					<label for="<%= f.id %>" class="input-group-prepend">
+						<span class="input-group-text">
+							<i class="fas fa-<%= f.icon %> m-1"></i>
+						</span>
+					</label>
+					<input
+						class="form-control"
+						type="<%= f.type %>"
+						name="<%= f.name %>"
+						id="<%= f.id %>"
+						placeholder="<%= f.placeholder %>"
+					/>
+				</div>
+				<small id="help-<%= f.id %>" class="form-text text-muted">
+					<%= f.smallText %>
+				</small>
+			</div>
+			<% }) %>
+			<div class="form-group my-3">
+				<div class="form-group">
+					<button
+						type="submit"
+						class="form-control btn btn-primary text-uppercase"
+					>
+						<i class="fas fa-paper-plane mx-2"></i>
+						<span>login</span>
+					</button>
+				</div>
+			</div>
+		</form>
+	</div>
+</div>
