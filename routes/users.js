@@ -69,6 +69,38 @@ let registerFields = [
 	},
 ];
 
+// start custom functions
+/**
+ *
+ * @name hashPassword
+ * @description hash the password
+ * @param {string} pass
+ * @returns hashed password
+ */
+function hashPassword(pass) {
+	const salt = genSaltSync(10);
+	const password = hashSync(pass, salt);
+	return pass;
+}
+/**
+ * @name reRenderPage
+ * @description a custom function to re-render the page
+ * @param {string} page
+ * @param {object} res
+ * @param {array} fields
+ * @param {array} errors
+ * @param {string} email
+ * @param {string} name
+ */
+function reRenderPage(page, res, fields, errors, email, name = "") {
+	if (page == "register") {
+		fields.find((el) => el.name == "name").value = name;
+	}
+	fields.find((el) => el.name == "email").value = email;
+	res.render(page, { fields, errors });
+}
+// end custom functions
+
 // routes
 route.get("/dashboard", (req, res, next) => {
 	res.render("dashboard");
@@ -81,20 +113,42 @@ route.get("/login", (req, res, next) => {
 	res.render("login", { fields: loginFields });
 });
 route.post("/login", (req, res, next) => {
-	res.send(req.body);
+	let errors = [];
+	let { email, password } = req.body;
+
+	// check & filter inputs
+	if (isEmpty(email) || isEmpty(password)) {
+		errors.push("please fill the require fields");
+	} else if (!isEmail(email)) {
+		errors.push("email filed must contain a valid email");
+	}
+
+	// check & re-render the page
+	if (isEmpty(errors)) {
+		// User.findOne({ email: email }).then((user) => {
+		// 	if (user) {
+		// 		errors.push("email already exists");
+		// 		reRenderPage("login", res, registerFields, errors, email);
+		// 	} else {
+		// 		const salt = genSaltSync(10);
+		// 		const password = hashSync(pass1, salt);
+		// 		let newUser = new User({ name, email, password });
+		// 		newUser.save().then((user) => {
+		// 			res.redirect("/login");
+		// 		});
+		// 	}
+		// });
+
+		res.json(req.body);
+	} else {
+		reRenderPage("login", res, loginFields, errors, email);
+	}
 });
 // Login-Routes
 
 /**
  * @name Register-Routes
  */
-// a custom function to re-render register form
-function reRenderPage(res, fields, errors, name, email) {
-	fields.find((el) => el.name == "name").value = name;
-	fields.find((el) => el.name == "email").value = email;
-	res.render("register", { fields, errors });
-}
-
 route.get("/register", (req, res, next) => {
 	res.render("register", { fields: registerFields });
 });
@@ -123,23 +177,31 @@ route.post("/register", (req, res, next) => {
 
 	// check & re-render the page
 	if (isEmpty(errors)) {
-		User.findOne({ email: email }).then((user) => {
+		User.findOne({ email }).then((user) => {
 			if (user) {
 				errors.push("email already exists");
 
-				reRenderPage(res, registerFields, errors, name, email);
+				reRenderPage("register", res, registerFields, errors, email, name);
 			} else {
-				const salt = genSaltSync(10);
-				const password = hashSync(pass1, salt);
+				const password = hashPassword(pass1);
 
 				let newUser = new User({ name, email, password });
-				newUser.save().then((user) => {
-					res.redirect("/login");
-				});
+				newUser
+					.save()
+					.then((user) => {
+						req.flash("successMSG", "you are registerd successfuly");
+						res.redirect("/login");
+					})
+					.catch((err) => {
+						const backURL = req.header("Referer") || "/";
+						req.flash("errorMSG", "something went wrong");
+						res.redirect(backURL);
+						console.log(err);
+					});
 			}
 		});
 	} else {
-		reRenderPage(res, registerFields, errors, name, email);
+		reRenderPage("register", res, registerFields, errors, email, name);
 	}
 });
 // Register-Routes

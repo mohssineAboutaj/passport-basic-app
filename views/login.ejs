@@ -3,7 +3,7 @@
 		<i class="fas fa-lock mx-2"></i>
 		<span>login</span>
 	</div>
-	<%- include('./partials/errors.ejs') %>
+	<%- include('./partials/messages.ejs') %>
 	<div class="card-body text-capitalize">
 		<form action="/login" method="POST">
 			<% fields.forEach((f, i) => { %>

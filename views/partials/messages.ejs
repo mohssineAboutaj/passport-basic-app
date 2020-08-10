@@ -1,0 +1,51 @@
+<div class="card-head text-capitalize">
+	<% if (typeof errors != "undefined" && errors.length > 0) { %>
+	<div class="errors-messages">
+		<% errors.forEach(err => { %>
+		<div class="alert alert-danger alert-dismissible fade show" role="alert">
+			<button
+				type="button"
+				class="close"
+				data-dismiss="alert"
+				aria-label="Close"
+			>
+				<span aria-hidden="true">&times;</span>
+			</button>
+			<strong><%= err %> </strong>
+		</div>
+		<% }) %>
+	</div>
+	<% } %>
+	<br />
+	<% if (successMSG != "") { %>
+	<div class="flash-success-msg">
+		<div class="alert alert-success alert-dismissible fade show" role="alert">
+			<button
+				type="button"
+				class="close"
+				data-dismiss="alert"
+				aria-label="Close"
+			>
+				<span aria-hidden="true">&times;</span>
+			</button>
+			<strong><%= successMSG %> </strong>
+		</div>
+	</div>
+	<% } %>
+	<br />
+	<% if (errorMSG != "") { %>
+	<div class="flash-success-msg">
+		<div class="alert alert-warning alert-dismissible fade show" role="alert">
+			<button
+				type="button"
+				class="close"
+				data-dismiss="alert"
+				aria-label="Close"
+			>
+				<span aria-hidden="true">&times;</span>
+			</button>
+			<strong><%= errorMSG %> </strong>
+		</div>
+	</div>
+	<% } %>
+</div>
