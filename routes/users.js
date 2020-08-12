@@ -1,8 +1,9 @@
 const route = require("express").Router();
 const isEmpty = require("is-empty");
 const isEmail = require("is-email");
-const User = require("../module/User");
+const User = require("../model/User");
 const { genSaltSync, hashSync } = require("bcryptjs");
+const passport = require("passport");
 
 // data
 let loginFields = [
@@ -79,8 +80,8 @@ let registerFields = [
  */
 function hashPassword(pass) {
 	const salt = genSaltSync(10);
-	const password = hashSync(pass, salt);
-	return pass;
+	const hashedPassword = hashSync(pass, salt);
+	return hashedPassword;
 }
 /**
  * @name reRenderPage
@@ -102,17 +103,11 @@ function reRenderPage(page, res, fields, errors, email, name = "") {
 // end custom functions
 
 // routes
-route.get("/dashboard", (req, res, next) => {
-	res.render("dashboard");
-});
-
 /**
  * @name Login-Routes
- */
-route.get("/login", (req, res, next) => {
+ */(req, res, next) => {
 	res.render("login", { fields: loginFields });
 });
-route.post("/login", (req, res, next) => {
 	let errors = [];
 	let { email, password } = req.body;
 
@@ -120,26 +115,16 @@ route.post("/login", (req, res, next) => {
 	if (isEmpty(email) || isEmpty(password)) {
 		errors.push("please fill the require fields");
 	} else if (!isEmail(email)) {
-		errors.push("email filed must contain a valid email");
+		errors.push("email field must contain a valid email");
 	}
 
 	// check & re-render the page
 	if (isEmpty(errors)) {
-		// User.findOne({ email: email }).then((user) => {
-		// 	if (user) {
-		// 		errors.push("email already exists");
-		// 		reRenderPage("login", res, registerFields, errors, email);
-		// 	} else {
-		// 		const salt = genSaltSync(10);
-		// 		const password = hashSync(pass1, salt);
-		// 		let newUser = new User({ name, email, password });
-		// 		newUser.save().then((user) => {
-		// 			res.redirect("/login");
-		// 		});
-		// 	}
-		// });
-
-		res.json(req.body);
+		passport.authenticate("local", {
+			successRedirect: "/dashboard",
+			failureRedirect: "/login",
+			failureFlash: true,
+		})(req, res, next);
 	} else {
 		reRenderPage("login", res, loginFields, errors, email);
 	}
@@ -148,11 +133,9 @@ route.post("/login", (req, res, next) => {
 
 /**
  * @name Register-Routes
- */
-route.get("/register", (req, res, next) => {
+ */req, res, next) => {
 	res.render("register", { fields: registerFields });
 });
-route.post("/register", (req, res, next) => {
 	let errors = [];
 	let { name, email, pass1, pass2 } = req.body;
 	const minNameLength = 4;
@@ -166,7 +149,7 @@ route.post("/register", (req, res, next) => {
 			errors.push(`name must be greater than ${minNameLength} characters`);
 		}
 		if (!isEmail(email)) {
-			errors.push("email filed must contain a valid email");
+			errors.push("email field must contain a valid email");
 		}
 		if (pass1.length < minPassLength) {
 			errors.push(`password must be greater than ${minPassLength} characters`);
@@ -205,6 +188,14 @@ route.post("/register", (req, res, next) => {
 	}
 });
 // Register-Routes
+
+// Logout-Route
+route.get("/logout", (req, res) => {
+	req.logout();
+	req.flash("successMSG", "You are logged out");
+	res.redirect("/");
+});
+// Logout-Route
 
 // export routes
 module.exports = route;

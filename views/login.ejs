@@ -3,7 +3,9 @@
 		<i class="fas fa-lock mx-2"></i>
 		<span>login</span>
 	</div>
-	<%- include('./partials/messages.ejs') %>
+	<div class="card-head text-capitalize">
+		<%- include('./partials/messages.ejs') %>
+	</div>
 	<div class="card-body text-capitalize">
 		<form action="/login" method="POST">
 			<% fields.forEach((f, i) => { %>
@@ -40,5 +42,9 @@
 				</div>
 			</div>
 		</form>
+	</div>
+	<div class="card-footer text-capitalize">
+		<span>not registerd yet?</span>
+		<a href="/register" class="mx-1">create an account</a>
 	</div>
 </div>
