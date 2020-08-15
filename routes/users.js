@@ -105,9 +105,11 @@ function reRenderPage(page, res, fields, errors, email, name = "") {
 // routes
 /**
  * @name Login-Routes
- */(req, res, next) => {
+ */
+route.get("/login", (req, res, next) => {
 	res.render("login", { fields: loginFields });
 });
+route.post("/login", (req, res, next) => {
 	let errors = [];
 	let { email, password } = req.body;
 
@@ -133,9 +135,11 @@ function reRenderPage(page, res, fields, errors, email, name = "") {
 
 /**
  * @name Register-Routes
- */req, res, next) => {
+ */
+route.get("/register", (req, res, next) => {
 	res.render("register", { fields: registerFields });
 });
+route.post("/register", (req, res, next) => {
 	let errors = [];
 	let { name, email, pass1, pass2 } = req.body;
 	const minNameLength = 4;
