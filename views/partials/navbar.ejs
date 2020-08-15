@@ -1,5 +1,5 @@
 <nav class="navbar navbar-expand-sm navbar-dark bg-primary">
-	<a class="navbar-brand mx-auto mx-md-left" href="#">Navbar</a>
+	<a class="navbar-brand mx-auto mx-md-left" href="/">NPA</a>
 	<button
 		class="navbar-toggler d-lg-none"
 		type="button"
@@ -13,10 +13,7 @@
 	</button>
 	<div class="collapse navbar-collapse" id="collapsibleNavId">
 		<ul class="navbar-nav ml-auto mt-lg-0">
-			<% [ { label: "home", href: "/home", icon: "home" },{ label: "dashboard",
-			href: "/dashboard", icon: "chart-area" }, { label: "login", href:
-			"/login", icon: "sign-in-alt" }, { label: "register", href: "/register",
-			icon: "user-plus" } ].forEach((el, index) => { %>
+			<% navLinks.forEach((el, index) => { %>
 			<li class="nav-item <%= (index == 0) ? 'active' : '' %>">
 				<a class="nav-link text-capitalize" href="<%= el.href %>">
 					<i class="fas fa-<%= el.icon %> fa-1x mx-2 mx-md-auto d-md-block"></i>

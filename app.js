@@ -49,6 +49,39 @@ app.use(
 app.use((req, res, next) => {
 	res.locals.successMSG = req.flash("successMSG");
 	res.locals.errorMSG = req.flash("errorMSG");
+	res.locals.user = req.user || undefined;
+	res.locals.navLinks = [
+		{
+			label: "home",
+			href: "/",
+			icon: "home",
+			needAuth: false,
+		},
+		{
+			label: "dashboard",
+			href: "/dashboard",
+			icon: "chart-area",
+			needAuth: true,
+		},
+		{
+			label: "login",
+			href: "/users/login",
+			icon: "sign-in-alt",
+			needAuth: false,
+		},
+		{
+			label: "register",
+			href: "/users/register",
+			icon: "user-plus",
+			needAuth: false,
+		},
+		{
+			label: "logout",
+			href: "/users/logout",
+			icon: "power-off",
+			needAuth: true,
+		},
+	];
 	next();
 });
 
@@ -58,7 +91,6 @@ app.use(passport.session());
 
 // Set routes
 app.use("/", require("./routes/index"));
-app.use("/", require("./routes/users"));
 
 app.listen(port, () => {
 	console.log(`App running on http://localhost:${port}`);

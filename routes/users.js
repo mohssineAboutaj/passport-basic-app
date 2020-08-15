@@ -4,6 +4,7 @@ const isEmail = require("is-email");
 const User = require("../model/User");
 const { genSaltSync, hashSync } = require("bcryptjs");
 const passport = require("passport");
+const { forwardAuth } = require("../config/auth");
 
 // data
 let loginFields = [
@@ -106,10 +107,10 @@ function reRenderPage(page, res, fields, errors, email, name = "") {
 /**
  * @name Login-Routes
  */
-route.get("/login", (req, res, next) => {
+route.get("/login", forwardAuth, (req, res, next) => {
 	res.render("login", { fields: loginFields });
 });
-route.post("/login", (req, res, next) => {
+route.post("/login", forwardAuth, (req, res, next) => {
 	let errors = [];
 	let { email, password } = req.body;
 
@@ -124,7 +125,7 @@ route.post("/login", (req, res, next) => {
 	if (isEmpty(errors)) {
 		passport.authenticate("local", {
 			successRedirect: "/dashboard",
-			failureRedirect: "/login",
+			failureRedirect: "/users/login",
 			failureFlash: true,
 		})(req, res, next);
 	} else {
@@ -136,10 +137,10 @@ route.post("/login", (req, res, next) => {
 /**
  * @name Register-Routes
  */
-route.get("/register", (req, res, next) => {
+route.get("/register", forwardAuth, (req, res, next) => {
 	res.render("register", { fields: registerFields });
 });
-route.post("/register", (req, res, next) => {
+route.post("/register", forwardAuth, (req, res, next) => {
 	let errors = [];
 	let { name, email, pass1, pass2 } = req.body;
 	const minNameLength = 4;
@@ -177,7 +178,7 @@ route.post("/register", (req, res, next) => {
 					.save()
 					.then((user) => {
 						req.flash("successMSG", "you are registerd successfuly");
-						res.redirect("/login");
+						res.redirect("/users/login");
 					})
 					.catch((err) => {
 						const backURL = req.header("Referer") || "/";
@@ -194,10 +195,11 @@ route.post("/register", (req, res, next) => {
 // Register-Routes
 
 // Logout-Route
-route.get("/logout", (req, res) => {
+route.get("/logout", (req, res, next) => {
 	req.logout();
 	req.flash("successMSG", "You are logged out");
 	res.redirect("/");
+	next();
 });
 // Logout-Route
 

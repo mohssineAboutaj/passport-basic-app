@@ -7,7 +7,7 @@
 		<%- include('./partials/messages.ejs') %>
 	</div>
 	<div class="card-body text-capitalize">
-		<form action="/register" method="POST">
+		<form action="/users/register" method="POST">
 			<% fields.forEach((f, i) => { %>
 			<div class="form-group my-3">
 				<label for="<%= f.id %>"><%= f.label %> </label>
@@ -45,6 +45,6 @@
 	</div>
 	<div class="card-footer text-capitalize">
 		<span>already have an account?</span>
-		<a href="/login" class="mx-1">login</a>
+		<a href="/users/login" class="mx-1">login</a>
 	</div>
 </div>
