@@ -7,6 +7,7 @@ const flash = require("connect-flash");
 const session = require("express-session");
 const passport = require("passport");
 const passportConfig = require("./config/passport");
+const colors = require("./node_modules/brand-colors/data/brandColors.json");
 
 // init the app
 const app = express();
@@ -42,7 +43,7 @@ app.use(
 		resave: true,
 		saveUninitialized: true,
 		secret: "secret",
-	})
+	}),
 );
 
 // Set Global variables
@@ -82,6 +83,25 @@ app.use((req, res, next) => {
 			needAuth: true,
 		},
 	];
+	// social login
+	res.locals.socialAuth = [
+		{
+			label: "github",
+			brand: "github",
+			bg: colors["github-8"],
+		},
+		{
+			label: "facebook",
+			brand: "facebook",
+			bg: colors["facebook"],
+		},
+		{
+			label: "google",
+			brand: "google",
+			bg: colors["google-4"],
+		},
+	];
+
 	next();
 });
 

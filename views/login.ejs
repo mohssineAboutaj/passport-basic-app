@@ -6,11 +6,31 @@
 	<div class="card-head text-capitalize">
 		<%- include('./partials/messages.ejs') %>
 	</div>
-	<div class="card-body text-capitalize">
-		<form action="/users/login" method="POST">
+	<div class="card-body">
+		<div class="text-center">
+			<% socialAuth.forEach(el => { %>
+				<a 
+					href="/users/auth/<%= el.label %>"
+					class="btn btn-block mx-1 my-2 text-capitalize" 
+					style="background-color: <%= el.bg %>;"
+				>
+					<i class="mx-1 fab fa-<%= el.brand %>"></i>
+					<span class="mx-1 font-weight-bold">login with <%= el.label %></span>
+				</a>
+			<% }) %>
+		</div>
+		<button 
+			class="btn btn-block mx-1 my-2 text-capitalize btn-secondary" 
+			onclick="document.querySelector('form#login-form').classList.toggle('d-none')"
+		>
+			<i class="mx-1 fas fa-envelope"></i>
+			<span class="mx-1 font-weight-bold">login with email</span>
+		</button>
+		<!-- <h6 class="text-center">or login manualy</h6> -->
+		<form action="/users/login" method="POST" class="d-none" id="login-form">
 			<% fields.forEach((f, i) => { %>
 			<div class="form-group my-3">
-				<label for="<%= f.id %>"><%= f.label %> </label>
+				<label for="<%= f.id %>" class="text-capitalize"><%= f.label %> </label>
 				<div class="input-group">
 					<label for="<%= f.id %>" class="input-group-prepend">
 						<span class="input-group-text">

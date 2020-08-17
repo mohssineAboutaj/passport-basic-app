@@ -1,10 +1,26 @@
-const { Strategy } = require("passport-local");
+// user model
 const User = require("../model/User");
+
+// dependencies
 const { compareSync } = require("bcryptjs");
 
+// stratygies
+const LocalStrategy = require("passport-local").Strategy;
+const GithubStrategy = require("passport-github").Strategy;
+const FacebookStrategy = require("passport-facebook").Strategy;
+const GoogleStrategy = require("passport-google").Strategy;
+
+// keys & id
+const { config } = require("./keys");
+
+// exports
 module.exports = (passport) => {
+	/**
+	 * @method LocalStrategy
+	 */
+
 	passport.use(
-		new Strategy(
+		new LocalStrategy(
 			{
 				usernameField: "email",
 			},
@@ -27,8 +43,27 @@ module.exports = (passport) => {
 					.catch((err) => {
 						console.log(err);
 					});
-			}
-		)
+			},
+		),
+	);
+
+	/**
+	 * @method GithubStrategy
+	 */
+	passport.use(
+		new GithubStrategy(
+			{
+				clientID: config.github.client_id,
+				clientSecret: config.github.client_secret,
+				callbackURL: "/users/auth/github/callback",
+			},
+			(accessToken, refreshToken, profile, cb) => {
+				console.log(profile);
+				// User.findOrCreate({ githubId: profile.id }, (err, user) => {
+				// 	return cb(err, user);
+				// });
+			},
+		),
 	);
 
 	// serialize the user

@@ -194,7 +194,9 @@ route.post("/register", forwardAuth, (req, res, next) => {
 });
 // Register-Routes
 
-// Logout-Route
+/**
+ * @name Logout-Route
+ */
 route.get("/logout", (req, res, next) => {
 	req.logout();
 	req.flash("successMSG", "You are logged out");
@@ -202,6 +204,24 @@ route.get("/logout", (req, res, next) => {
 	next();
 });
 // Logout-Route
+
+/**
+ * @name Github-Routes
+ */
+route.get("/users/auth/github", passport.authenticate("github"));
+route.get(
+	"/users/auth/github/callback",
+	passport.authenticate(
+		"github",
+		{
+			failureRedirect: "/users/login",
+		},
+		(req, res) => {
+			res.redirect("/dashboard");
+		},
+	),
+);
+// Github-Routes
 
 // export routes
 module.exports = route;
