@@ -1,3 +1,4 @@
+<!-- prettier-ignore -->
 <nav class="navbar navbar-expand-sm navbar-dark bg-primary">
 	<a class="navbar-brand mx-auto mx-md-left" href="/">NPA</a>
 	<button
@@ -13,26 +14,36 @@
 	</button>
 	<div class="collapse navbar-collapse" id="collapsibleNavId">
 		<ul class="navbar-nav ml-auto mt-lg-0">
-			<% navLinks.forEach((el, index) => { %> <% if (typeof user != undefined &&
-			el.needAuth === true) { %>
-			<li class="nav-item <%= (index == 0) ? 'active' : '' %>">
-				<a class="nav-link text-capitalize" href="<%= el.href %>">
-					<i class="fas fa-<%= el.icon %> fa-1x mx-2 mx-md-auto d-md-block"></i>
-					<%= el.label %> <% if (index == 0) { %>
-					<span class="sr-only">(current)</span>
-					<% } %>
-				</a>
-			</li>
+			<% navLinks.filter(el => el.isPublic).forEach((el, index) => { %>
+				<li class="nav-item <%= (index == 0) ? 'active' : '' %>">
+					<a class="nav-link text-capitalize" href="<%= el.href %>">
+						<i class="fas fa-<%= el.icon %> fa-1x mx-2 mx-md-auto d-md-block"></i>
+						<%= el.label %> 
+						<% if (index == 0) { %>
+							<span class="sr-only">(current)</span>
+						<% } %>
+					</a>
+				</li>
+			<% }) %>
+			<% if (user) { %>
+			 <% navLinks.filter(el => (el.needAuth && !el.isPublic)).forEach((el) => { %>
+				<li class="nav-item">
+					<a class="nav-link text-capitalize" href="<%= el.href %>">
+						<i class="fas fa-<%= el.icon %> fa-1x mx-2 mx-md-auto d-md-block"></i>
+						<%= el.label %> 
+					</a>
+				</li>
+			 <% }) %>
 			<% } else { %>
-			<li class="nav-item <%= (index == 0) ? 'active' : '' %>">
-				<a class="nav-link text-capitalize" href="<%= el.href %>">
-					<i class="fas fa-<%= el.icon %> fa-1x mx-2 mx-md-auto d-md-block"></i>
-					<%= el.label %> <% if (index == 0) { %>
-					<span class="sr-only">(current)</span>
-					<% } %>
-				</a>
-			</li>
-			<% } %> <% }) %>
-		</ul>
+				<% navLinks.filter(el => (!el.needAuth && !el.isPublic)).forEach((el, index) => { %>
+					<li class="nav-item">
+						<a class="nav-link text-capitalize" href="<%= el.href %>">
+							<i class="fas fa-<%= el.icon %> fa-1x mx-2 mx-md-auto d-md-block"></i>
+							<%= el.label %> 
+						</a>
+					</li>
+				 <% }) %>
+				<% } %>
+			</ul>
 	</div>
 </nav>

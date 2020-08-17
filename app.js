@@ -55,7 +55,7 @@ app.use((req, res, next) => {
 			label: "home",
 			href: "/",
 			icon: "home",
-			needAuth: false,
+			isPublic: true,
 		},
 		{
 			label: "dashboard",
