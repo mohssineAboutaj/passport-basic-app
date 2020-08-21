@@ -7,28 +7,47 @@
 		<%- include('./partials/messages.ejs') %>
 	</div>
 	<div class="card-body text-capitalize">
-		<form action="/users/register" method="POST">
+		<div class="text-center">
+			<% socialAuth.forEach(el => { %>
+				<a 
+					href="/users/auth/<%= el.label %>"
+					class="btn btn-block mx-1 my-2 text-capitalize" 
+					style="background-color: <%= el.bg %>;"
+				>
+					<i class="mx-1 fab fa-<%= el.brand %>"></i>
+					<span class="mx-1 font-weight-bold">register with <%= el.label %></span>
+				</a>
+			<% }) %>
+		</div>
+		<button 
+			class="btn btn-block mx-1 my-2 text-capitalize btn-secondary" 
+			onclick="document.querySelector('form#register-form').classList.toggle('d-none')"
+		>
+			<i class="mx-1 fas fa-envelope"></i>
+			<span class="mx-1 font-weight-bold">register with email</span>
+		</button>
+		<form action="/users/register" method="POST" class="d-none" id="register-form">
 			<% fields.forEach((f, i) => { %>
-			<div class="form-group my-3">
-				<label for="<%= f.id %>"><%= f.label %> </label>
-				<div class="input-group">
-					<label for="<%= f.id %>" class="input-group-prepend">
-						<span class="input-group-text">
-							<i class="fas fa-<%= f.icon %> m-1"></i>
-						</span>
-					</label>
-					<input
-						autofocus="<% i == 0 ? true : false %>"
-						required="<%= f.required %>"
-						value="<%= f.value %>"
-						class="form-control"
-						type="<%= f.type %>"
-						name="<%= f.name %>"
-						id="<%= f.id %>"
-						placeholder="<%= f.placeholder %>"
-					/>
+				<div class="form-group my-3">
+					<label for="<%= f.id %>"><%= f.label %> </label>
+					<div class="input-group">
+						<label for="<%= f.id %>" class="input-group-prepend">
+							<span class="input-group-text">
+								<i class="fas fa-<%= f.icon %> m-1"></i>
+							</span>
+						</label>
+						<input
+							autofocus="<% i == 0 ? true : false %>"
+							required="<%= f.required %>"
+							value="<%= f.value %>"
+							class="form-control"
+							type="<%= f.type %>"
+							name="<%= f.name %>"
+							id="<%= f.id %>"
+							placeholder="<%= f.placeholder %>"
+						/>
+					</div>
 				</div>
-			</div>
 			<% }) %>
 			<div class="form-group my-3">
 				<div class="form-group">

@@ -208,20 +208,84 @@ route.get("/logout", (req, res, next) => {
 /**
  * @name Github-Routes
  */
-route.get("/users/auth/github", passport.authenticate("github"));
 route.get(
-	"/users/auth/github/callback",
-	passport.authenticate(
-		"github",
-		{
-			failureRedirect: "/users/login",
-		},
-		(req, res) => {
-			res.redirect("/dashboard");
-		},
-	),
+	"/auth/github",
+	passport.authenticate("github", {
+		successRedirect: "/dashboard",
+		failureRedirect: "/users/login",
+		failureFlash: true,
+		scope: ["user"],
+	}),
+);
+route.get(
+	"/auth/github/callback",
+	passport.authenticate("github", {
+		failureRedirect: "/users/login",
+		successRedirect: "/dashboard",
+	}),
 );
 // Github-Routes
+
+// /**
+//  * @name Google-Route
+//  */
+// route.get(
+// 	"/auth/google",
+// 	passport.authenticate("google", {
+// 		successRedirect: "/dashboard",
+// 		failureRedirect: "/users/login",
+// 		failureFlash: true,
+// 		scope: ["profile"],
+// 	}),
+// );
+// route.get(
+// 	"/auth/google/callback",
+// 	passport.authenticate("google", {
+// 		failureRedirect: "/users/login",
+// 		successRedirect: "/dashboard",
+// 	}),
+// );
+// // Google-Route
+
+/**
+ * @name Facebook-Route
+ */
+route.get(
+	"/auth/facebook",
+	passport.authenticate("facebook", {
+		successRedirect: "/dashboard",
+		failureRedirect: "/users/login",
+		failureFlash: true,
+	}),
+);
+route.get(
+	"/auth/facebook/callback",
+	passport.authenticate("facebook", {
+		failureRedirect: "/users/login",
+		successRedirect: "/dashboard",
+	}),
+);
+// Facebook-Route
+
+/**
+ * @name Instagram-Route
+ */
+route.get(
+	"/auth/instagram",
+	passport.authenticate("instagram", {
+		successRedirect: "/dashboard",
+		failureRedirect: "/users/login",
+		failureFlash: true,
+	}),
+);
+route.get(
+	"/auth/instagram/callback",
+	passport.authenticate("instagram", {
+		failureRedirect: "/users/login",
+		successRedirect: "/dashboard",
+	}),
+);
+// Instagram-Route
 
 // export routes
 module.exports = route;

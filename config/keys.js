@@ -10,4 +10,5 @@ module.exports = {
 	mongoURI,
 	port: process.env.PORT || 6600,
 	config,
+	defaultPass: "social-auth",
 };

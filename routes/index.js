@@ -1,5 +1,6 @@
 const route = require("express").Router();
 const { ensureAuth } = require("../config/auth");
+const passport = require("passport");
 
 // home page
 route.get("/", (req, res) => {
@@ -16,4 +17,5 @@ route.get("/dashboard", ensureAuth, (req, res, next) => {
 // users page
 route.use("/users", require("./users"));
 
+// exports
 module.exports = route;

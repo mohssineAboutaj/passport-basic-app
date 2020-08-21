@@ -96,6 +96,16 @@ app.use((req, res, next) => {
 			bg: colors["facebook"],
 		},
 		{
+			label: "instagram",
+			brand: "instagram",
+			bg: colors["instagram-7"],
+		},
+		{
+			label: "twitter",
+			brand: "twitter",
+			bg: colors["twitter"],
+		},
+		{
 			label: "google",
 			brand: "google",
 			bg: colors["google-4"],
