@@ -211,128 +211,49 @@ route.get("/logout", (req, res, next) => {
 });
 // Logout-Route
 
-/**
- * @name Github-Routes
- */
-route.get(
-	"/auth/github",
-	passport.authenticate("github", {
+function globalRouteSetup(provider, scopes = []) {
+	let authRouteOptions = {
 		successRedirect,
 		failureRedirect,
 		failureFlash: true,
-		scope: ["profile"],
-	}),
-);
-route.get(
-	"/auth/github/callback",
-	passport.authenticate("github", {
-		failureRedirect,
-		successRedirect,
-	}),
-);
-// Github-Routes
+		scope: scopes,
+	};
 
-/**
- * @name Gitlab-Routes
- */
-route.get(
-	"/auth/gitlab",
-	passport.authenticate("gitlab", {
-		successRedirect,
-		failureRedirect,
-		failureFlash: true,
-		scope: ["email"],
-	}),
-);
-route.get(
-	"/auth/gitlab/callback",
-	passport.authenticate("gitlab", {
-		failureRedirect,
-		successRedirect,
-	}),
-);
-// Gitlab-Routes
+	// if scopes are passed, add new option to the authroauthRouteOptions
+	if (scopes.length > 0) {
+		authRouteOptions.scope = scopes;
+	}
 
-// /**
-//  * @name Google-Route
-//  */
-// route.get(
-// 	"/auth/google",
-// 	passport.authenticate("google", {
-// 		successRedirect,
-// 		failureRedirect,
-// 		failureFlash: true,
-// 		scope: ["profile"],
-// 	}),
-// );
-// route.get(
-// 	"/auth/google/callback",
-// 	passport.authenticate("google", {
-// 		failureRedirect,
-// 		successRedirect,
-// 	}),
-// );
-// // Google-Route
+	route.get(
+		`/auth/${provider}`,
+		passport.authenticate(provider, authRouteOptions),
+	);
+	route.get(
+		`/auth/${provider}/callback`,
+		passport.authenticate(provider, {
+			failureRedirect,
+			successRedirect,
+		}),
+	);
+}
 
-/**
- * @name Facebook-Route
- */
-route.get(
-	"/auth/facebook",
-	passport.authenticate("facebook", {
-		successRedirect,
-		failureRedirect,
-		failureFlash: true,
-	}),
-);
-route.get(
-	"/auth/facebook/callback",
-	passport.authenticate("facebook", {
-		failureRedirect,
-		successRedirect,
-	}),
-);
-// Facebook-Route
+// github routes
+globalRouteSetup("github");
 
-/**
- * @name Instagram-Route
- */
-route.get(
-	"/auth/instagram",
-	passport.authenticate("instagram", {
-		successRedirect,
-		failureRedirect,
-		failureFlash: true,
-	}),
-);
-route.get(
-	"/auth/instagram/callback",
-	passport.authenticate("instagram", {
-		failureRedirect,
-		successRedirect,
-	}),
-);
-// Instagram-Route
+// gitlab routes
+globalRouteSetup("gitlab", ["email"]);
 
-/**
- * @name Discord-Route
- */
-route.get(
-	"/auth/discord",
-	passport.authenticate("discord", {
-		successRedirect,
-		failureRedirect,
-		failureFlash: true,
-	}),
-);
-route.get(
-	"/auth/discord/callback",
-	passport.authenticate("discord", {
-		failureRedirect,
-		successRedirect,
-	}),
-);
-// Discord-Route
+// google routes
+globalRouteSetup("google", ["profile"]);
+
+// facebook routes
+globalRouteSetup("facebook", ["profile"]);
+
+// instagram routes
+globalRouteSetup("instagram");
+
+// discord routes
+globalRouteSetup("discord", ["email", "identify"]);
 
 // export routes
 module.exports = route;
