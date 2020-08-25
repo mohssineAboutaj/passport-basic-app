@@ -115,6 +115,11 @@ app.use((req, res, next) => {
 			brand: "discord",
 			bg: colors["discord"],
 		},
+		{
+			label: "dropbox",
+			brand: "dropbox",
+			bg: colors["dropbox-3"],
+		},
 		// {
 		// 	label: "google",
 		// 	brand: "google",

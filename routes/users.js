@@ -211,12 +211,16 @@ route.get("/logout", (req, res, next) => {
 });
 // Logout-Route
 
-function globalRouteSetup(provider, scopes = []) {
+function globalRouteSetup(
+	authRoute,
+	provider,
+	scopes = [],
+	additionalArgs = {},
+) {
 	let authRouteOptions = {
 		successRedirect,
 		failureRedirect,
 		failureFlash: true,
-		scope: scopes,
 	};
 
 	// if scopes are passed, add new option to the authroauthRouteOptions
@@ -225,11 +229,11 @@ function globalRouteSetup(provider, scopes = []) {
 	}
 
 	route.get(
-		`/auth/${provider}`,
-		passport.authenticate(provider, authRouteOptions),
+		`/auth/${authRoute}`,
+		passport.authenticate(provider, { ...authRouteOptions, ...additionalArgs }),
 	);
 	route.get(
-		`/auth/${provider}/callback`,
+		`/auth/${authRoute}/callback`,
 		passport.authenticate(provider, {
 			failureRedirect,
 			successRedirect,
@@ -238,22 +242,25 @@ function globalRouteSetup(provider, scopes = []) {
 }
 
 // github routes
-globalRouteSetup("github");
+globalRouteSetup("github", "github");
 
 // gitlab routes
-globalRouteSetup("gitlab", ["email"]);
+globalRouteSetup("gitlab", "gitlab", ["email"]);
 
 // google routes
-globalRouteSetup("google", ["profile"]);
+globalRouteSetup("google", "google", ["profile"]);
 
 // facebook routes
-globalRouteSetup("facebook", ["profile"]);
+globalRouteSetup("facebook", "facebook", ["profile"]);
 
 // instagram routes
-globalRouteSetup("instagram");
+globalRouteSetup("instagram", "instagram");
 
 // discord routes
-globalRouteSetup("discord", ["email", "identify"]);
+globalRouteSetup("discord", "discord", ["email", "identify"]);
+
+// dropbox routes
+globalRouteSetup("dropbox", "dropbox-oauth2");
 
 // export routes
 module.exports = route;

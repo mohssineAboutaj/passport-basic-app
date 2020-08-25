@@ -12,6 +12,7 @@ const { Strategy: FacebookStrategy } = require("passport-facebook");
 const { Strategy: GoogleStrategy } = require("passport-google-oauth20");
 const { Strategy: InstagramStrategy } = require("passport-instagram");
 const { Strategy: DiscordStrategy } = require("passport-discord");
+const { Strategy: DropboxStrategy } = require("passport-dropbox-oauth2");
 
 // keys & id
 const { config, defaultPass } = require("./keys");
@@ -214,6 +215,31 @@ module.exports = (passport) => {
 			(accessToken, refreshToken, profile, done) => {
 				const email = profile.email;
 				const name = profile.username;
+				User.findOne({ email }).then((user) => {
+					if (user) {
+						return done(null, user);
+					} else {
+						createNewUser(name, email, done);
+					}
+				});
+			},
+		),
+	);
+
+	/**
+	 * @method DropboxStrategy
+	 */
+	passport.use(
+		new DropboxStrategy(
+			{
+				apiVersion: "2",
+				clientID: config.dropbox.client_id,
+				clientSecret: config.dropbox.client_secret,
+				callbackURL: "/users/auth/dropbox/callback",
+			},
+			(accessToken, refreshToken, profile, done) => {
+				const email = profile._json.email;
+				const name = profile.displayName || profile._json.name.display_name;
 				User.findOne({ email }).then((user) => {
 					if (user) {
 						return done(null, user);
