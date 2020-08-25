@@ -7,17 +7,34 @@
 		<%- include('./partials/messages.ejs') %>
 	</div>
 	<div class="card-body">
-		<div class="text-center">
+		<div>
 			<% socialAuth.forEach(el => { %>
 				<a 
 					href="/users/auth/<%= el.label %>"
-					class="btn btn-block mx-1 my-2 text-capitalize" 
+					class="btn btn-block mx-1 my-2 text-capitalize d-none" 
 					style="background-color: <%= el.bg %>;"
 				>
 					<i class="mx-1 fab fa-<%= el.brand %>"></i>
 					<span class="mx-1 font-weight-bold">login with <%= el.label %></span>
 				</a>
 			<% }) %>
+			<div class="row">
+				<% socialAuth.forEach(el => { %>
+					<div class="col">
+						<a 
+							href="/users/auth/<%= el.label %>"
+							class="btn btn-block mx-1 my-2 text-capitalize text-center" 
+							data-toggle="tooltip" 
+							data-placement="top"
+							title="login with <%= el.label %>"
+							style="background-color: <%= el.bg %>;"
+						>
+							<i class="fab fa-2x fa-<%= el.brand %>"></i>
+							<!-- <span class="mx-1 font-weight-bold">login with <%= el.label %></span> -->
+						</a>
+					</div>
+				<% }) %>
+			</div>
 		</div>
 		<button 
 			class="btn btn-block mx-1 my-2 text-capitalize btn-secondary" 

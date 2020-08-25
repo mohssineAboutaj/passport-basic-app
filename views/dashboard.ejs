@@ -1,3 +1,23 @@
 <h2>dashboard</h2>
-<h3>welcome User <%= user.name %></h3>
+<h3>welcome to dashboard</h3>
+<ul class="list-group mt-2 mb-4">
+  <li class="list-group-item d-flex align-items-center">
+    <span class="badge badge-primary text-light badge-pill p-2 mx-2">
+      <i class="fas fa-hashtag fa-2x"></i>
+    </span>
+    <span><%= user.id %> </span>
+  </li>
+  <li class="list-group-item d-flex align-items-center">
+    <span class="badge badge-primary text-light badge-pill p-2 mx-2">
+      <i class="fas fa-user fa-2x"></i>
+    </span>
+    <span><%= user.name %> </span>
+  </li>
+  <li class="list-group-item d-flex align-items-center">
+    <span class="badge badge-primary text-light badge-pill p-2 mx-2">
+      <i class="fas fa-at fa-2x"></i>
+    </span>
+    <span><%= user.email %> </span>
+  </li>
+</ul>
 <a href="/users/logout" class="btn btn-danger">logout</a>

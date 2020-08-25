@@ -7,9 +7,11 @@ const { compareSync } = require("bcryptjs");
 // stratygies
 const { Strategy: LocalStrategy } = require("passport-local");
 const { Strategy: GithubStrategy } = require("passport-github");
+const { Strategy: GitlabStrategy } = require("passport-gitlab2");
 const { Strategy: FacebookStrategy } = require("passport-facebook");
 const { Strategy: GoogleStrategy } = require("passport-google-oauth20");
 const { Strategy: InstagramStrategy } = require("passport-instagram");
+const { Strategy: DiscordStrategy } = require("passport-discord");
 
 // keys & id
 const { config, defaultPass } = require("./keys");
@@ -96,6 +98,32 @@ module.exports = (passport) => {
 	);
 
 	/**
+	 * @method GitlabStrategy
+	 */
+	passport.use(
+		new GitlabStrategy(
+			{
+				clientID: config.gitlab.client_id,
+				clientSecret: config.gitlab.client_secret,
+				callbackURL: "/users/auth/gitlab/callback",
+				profileFields: ["id", "email"],
+			},
+			(accessToken, refreshToken, profile, done) => {
+				console.log(profile);
+				// const email = profile._json.email;
+				// const name = profile.displayName || profile.username;
+				// User.findOne({ email }).then((user) => {
+				// 	if (user) {
+				// 		return done(null, user);
+				// 	} else {
+				// 		createNewUser(name, email, done);
+				// 	}
+				// });
+			},
+		),
+	);
+
+	/**
 	 * @method GoogleStrategy
 	 */
 	// passport.use(
@@ -128,6 +156,34 @@ module.exports = (passport) => {
 				clientID: config.facebook.client_id,
 				clientSecret: config.facebook.client_secret,
 				callbackURL: "/users/auth/facebook/callback",
+				profileFields: ["id", "email", "name"],
+			},
+			(accessToken, refreshToken, profile, done) => {
+				const email = profile._json.email;
+				const name =
+					profile.username ||
+					profile.displayName ||
+					profile._json.first_name + " " + profile.last_name;
+				User.findOne({ email }).then((user) => {
+					if (user) {
+						return done(null, user);
+					} else {
+						createNewUser(name, email, done);
+					}
+				});
+			},
+		),
+	);
+
+	/**
+	 * @method InstagramStrategy
+	 */
+	passport.use(
+		new InstagramStrategy(
+			{
+				clientID: config.instagram.client_id,
+				clientSecret: config.instagram.client_secret,
+				callbackURL: "/users/auth/instagram/callback",
 			},
 			(accessToken, refreshToken, profile, done) => {
 				const email = profile._json.email;
@@ -145,24 +201,24 @@ module.exports = (passport) => {
 	);
 
 	/**
-	 * @method InstagramStrategy
+	 * @method DiscordStrategy
 	 */
 	passport.use(
-		new InstagramStrategy(
+		new DiscordStrategy(
 			{
-				clientID: config.facebook.client_id,
-				clientSecret: config.facebook.client_secret,
-				callbackURL: "/users/auth/facebook/callback",
+				clientID: config.discord.client_id,
+				clientSecret: config.discord.client_secret,
+				callbackURL: "/users/auth/discord/callback",
+				scope: ["email", "identify"],
 			},
 			(accessToken, refreshToken, profile, done) => {
-				const email = profile._json.email;
-				const name = profile.username || profile.displayName;
+				const email = profile.email;
+				const name = profile.username;
 				User.findOne({ email }).then((user) => {
 					if (user) {
 						return done(null, user);
 					} else {
-						console.log(profile);
-						// createNewUser(name, email, done);
+						createNewUser(name, email, done);
 					}
 				});
 			},

@@ -6,6 +6,12 @@ const { genSaltSync, hashSync } = require("bcryptjs");
 const passport = require("passport");
 const { forwardAuth } = require("../config/auth");
 
+// global failure redirect route
+const failureRedirect = "/users/login";
+
+// global success redirect route
+const successRedirect = "/dashboard";
+
 // data
 let loginFields = [
 	{
@@ -124,8 +130,8 @@ route.post("/login", forwardAuth, (req, res, next) => {
 	// check & re-render the page
 	if (isEmpty(errors)) {
 		passport.authenticate("local", {
-			successRedirect: "/dashboard",
-			failureRedirect: "/users/login",
+			successRedirect,
+			failureRedirect,
 			failureFlash: true,
 		})(req, res, next);
 	} else {
@@ -211,20 +217,41 @@ route.get("/logout", (req, res, next) => {
 route.get(
 	"/auth/github",
 	passport.authenticate("github", {
-		successRedirect: "/dashboard",
-		failureRedirect: "/users/login",
+		successRedirect,
+		failureRedirect,
 		failureFlash: true,
-		scope: ["user"],
+		scope: ["profile"],
 	}),
 );
 route.get(
 	"/auth/github/callback",
 	passport.authenticate("github", {
-		failureRedirect: "/users/login",
-		successRedirect: "/dashboard",
+		failureRedirect,
+		successRedirect,
 	}),
 );
 // Github-Routes
+
+/**
+ * @name Gitlab-Routes
+ */
+route.get(
+	"/auth/gitlab",
+	passport.authenticate("gitlab", {
+		successRedirect,
+		failureRedirect,
+		failureFlash: true,
+		scope: ["email"],
+	}),
+);
+route.get(
+	"/auth/gitlab/callback",
+	passport.authenticate("gitlab", {
+		failureRedirect,
+		successRedirect,
+	}),
+);
+// Gitlab-Routes
 
 // /**
 //  * @name Google-Route
@@ -232,8 +259,8 @@ route.get(
 // route.get(
 // 	"/auth/google",
 // 	passport.authenticate("google", {
-// 		successRedirect: "/dashboard",
-// 		failureRedirect: "/users/login",
+// 		successRedirect,
+// 		failureRedirect,
 // 		failureFlash: true,
 // 		scope: ["profile"],
 // 	}),
@@ -241,8 +268,8 @@ route.get(
 // route.get(
 // 	"/auth/google/callback",
 // 	passport.authenticate("google", {
-// 		failureRedirect: "/users/login",
-// 		successRedirect: "/dashboard",
+// 		failureRedirect,
+// 		successRedirect,
 // 	}),
 // );
 // // Google-Route
@@ -253,16 +280,16 @@ route.get(
 route.get(
 	"/auth/facebook",
 	passport.authenticate("facebook", {
-		successRedirect: "/dashboard",
-		failureRedirect: "/users/login",
+		successRedirect,
+		failureRedirect,
 		failureFlash: true,
 	}),
 );
 route.get(
 	"/auth/facebook/callback",
 	passport.authenticate("facebook", {
-		failureRedirect: "/users/login",
-		successRedirect: "/dashboard",
+		failureRedirect,
+		successRedirect,
 	}),
 );
 // Facebook-Route
@@ -273,19 +300,39 @@ route.get(
 route.get(
 	"/auth/instagram",
 	passport.authenticate("instagram", {
-		successRedirect: "/dashboard",
-		failureRedirect: "/users/login",
+		successRedirect,
+		failureRedirect,
 		failureFlash: true,
 	}),
 );
 route.get(
 	"/auth/instagram/callback",
 	passport.authenticate("instagram", {
-		failureRedirect: "/users/login",
-		successRedirect: "/dashboard",
+		failureRedirect,
+		successRedirect,
 	}),
 );
 // Instagram-Route
+
+/**
+ * @name Discord-Route
+ */
+route.get(
+	"/auth/discord",
+	passport.authenticate("discord", {
+		successRedirect,
+		failureRedirect,
+		failureFlash: true,
+	}),
+);
+route.get(
+	"/auth/discord/callback",
+	passport.authenticate("discord", {
+		failureRedirect,
+		successRedirect,
+	}),
+);
+// Discord-Route
 
 // export routes
 module.exports = route;

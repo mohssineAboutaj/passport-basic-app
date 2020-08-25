@@ -90,26 +90,36 @@ app.use((req, res, next) => {
 			brand: "github",
 			bg: colors["github-8"],
 		},
+		// {
+		// 	label: "gitlab",
+		// 	brand: "gitlab",
+		// 	bg: colors["gitlab-3"],
+		// },
 		{
 			label: "facebook",
 			brand: "facebook",
 			bg: colors["facebook"],
 		},
+		// {
+		// 	label: "instagram",
+		// 	brand: "instagram",
+		// 	bg: colors["instagram-7"],
+		// },
+		// {
+		// 	label: "twitter",
+		// 	brand: "twitter",
+		// 	bg: colors["twitter"],
+		// },
 		{
-			label: "instagram",
-			brand: "instagram",
-			bg: colors["instagram-7"],
+			label: "discord",
+			brand: "discord",
+			bg: colors["discord"],
 		},
-		{
-			label: "twitter",
-			brand: "twitter",
-			bg: colors["twitter"],
-		},
-		{
-			label: "google",
-			brand: "google",
-			bg: colors["google-4"],
-		},
+		// {
+		// 	label: "google",
+		// 	brand: "google",
+		// 	bg: colors["google-4"],
+		// },
 	];
 
 	next();
