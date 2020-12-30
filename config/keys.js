@@ -1,14 +1,17 @@
-const encodeurl = require("encodeurl");
+// import dependencies & confi
+const encodeurl = require("encodeurl")
+const { mongoURI: newMongoURI } = require("../config.json")
 
-const config = require("../config.json");
+// default values
+const defaultMongoURI = "mongodb://localhost:27017/passport_app"
+const defaultPass = "social-auth"
 
-let mongoURI = "mongodb://localhost:27017/passport_app";
+// set mongodb URI
+const mongoURI = newMongoURI || defaultMongoURI
 
-mongoURI = encodeurl(mongoURI);
-
+// exports
 module.exports = {
-	mongoURI,
-	port: process.env.PORT || 6600,
-	config,
-	defaultPass: "social-auth",
-};
+  mongoURI: encodeurl(mongoURI),
+  port: process.env.PORT || 6600,
+  defaultPass,
+}

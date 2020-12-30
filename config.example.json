@@ -1,10 +1,31 @@
 {
-	"github": {
-		"client_id": "",
-		"client_secret": ""
-	},
-	"facebook": {
-		"client_id": "",
-		"client_secret": ""
-	}
+  "mongoURI": "",
+  "github": {
+    "client_id": "",
+    "client_secret": ""
+  },
+  "gitlab": {
+    "client_id": "",
+    "client_secret": ""
+  },
+  "instagram": {
+    "client_id": "",
+    "client_secret": ""
+  },
+  "facebook": {
+    "client_id": "",
+    "client_secret": ""
+  },
+  "google": {
+    "client_id": "",
+    "client_secret": ""
+  },
+  "dropbox": {
+    "client_id": "",
+    "client_secret": ""
+  },
+  "discord": {
+    "client_id": "",
+    "client_secret": ""
+  }
 }
